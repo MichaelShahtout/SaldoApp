@@ -11,7 +11,7 @@ import {
   PLAID_SECRET,
 } from '@env';
 
-export default function BankLinkScreen() {
+export default function BankLinkScreen({ onLinkSuccess }) {
   const PLAID_BASE      = `https://${PLAID_ENV}.plaid.com`;
 
   console.log({ PLAID_ENV, PLAID_CLIENT_ID, PLAID_SECRET, PLAID_BASE });
@@ -32,6 +32,7 @@ export default function BankLinkScreen() {
         products:     ['transactions'],
         country_codes:['US'],
         language:     'en',
+        redirect_uri: 'https://michaelshahtout.github.io/SaldoApp/oauth.html'
       }),
     })
       .then(r => r.json())
@@ -65,7 +66,7 @@ export default function BankLinkScreen() {
         .then(r => r.json())
         .then(data => {
           const accessToken = data.access_token;
-          // handle accessToken...
+          onLinkSuccess(accessToken);
         })
         .catch(console.error);
       },
